@@ -1,14 +1,27 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
-import Form from 'Components/Form';
+import ColumnForm from 'Components/Form/ColumnForm';
 import Spreadsheet from 'Components/Spreadsheet';
+import * as localStore from 'Components/Generics/Localstore';
 
-class App extends Component {
+class App extends React.Component {
+  state = {
+    columnData: null
+  }
+
+  componentDidMount() {
+    let columnData = localStore.getColumnData('columnData');
+    if(columnData)
+      this.setState({columnData: columnData});
+  }
+
   render() {
     return (
       <div className="App">
-        <Spreadsheet />
+        {
+          this.state.columnData ? <Spreadsheet /> : <ColumnForm />
+        }
+
       </div>
     );
   }
