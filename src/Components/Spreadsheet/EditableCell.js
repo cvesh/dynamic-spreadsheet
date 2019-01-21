@@ -3,8 +3,8 @@ import React from 'react';
 const EditableCell = props => (
   <td>
     <input 
-      type='text'
-      name={props.cellData.type}
+      type={props.cellData.type}
+      name={props.cellData.name}
       id={props.cellData.id}
       value={props.cellData.value} 
       onChange={props.tableUpdate} />

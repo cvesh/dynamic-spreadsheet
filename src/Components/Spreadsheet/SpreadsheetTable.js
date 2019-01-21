@@ -1,7 +1,16 @@
 import React from 'react';
 import TableRow from 'Components/Spreadsheet/TableRow';
+import * as localStore from 'Components/Generics/Localstore';
 
 class SpreadsheetTable extends React.Component {
+  state = {
+    headerCell: []
+  }
+
+  componentDidMount() {
+    let headerCell = localStore.getColumnData('columnData');
+    this.setState({ headerCell: headerCell }); 
+  }
   render() {
     const { tableUpdate, rowAdd, rowDel, filterText, tableData } = this.props;
     var rowData = tableData.map(function(rowData) {
@@ -15,6 +24,7 @@ class SpreadsheetTable extends React.Component {
           onDelEvent={e => rowDel(e)}
           key={rowData.id}/>)
     });
+    const { headerCell } = this.state;
     return (
       <div>
         <button 
@@ -23,11 +33,17 @@ class SpreadsheetTable extends React.Component {
           className="btn">Add</button>
         <table className="table table-bordered">
           <thead>
-            <tr>
-              <th>Name</th>
-              <th>price</th>
-              <th>quantity</th>
-              <th>category</th>
+            <tr>  
+              {
+                headerCell.map((cell, index) => 
+                <th key={cell}>
+                  <input 
+                    type='text'
+                    name={cell.columnTitle}
+                    value={cell.columnTitle} 
+                    onChange={this.tableUpdate} />
+                </th>)
+              }
             </tr>
           </thead>
           <tbody>{rowData}</tbody>

@@ -13,29 +13,17 @@ class TableRow extends React.Component {
         <EditableCell 
           tableUpdate={tableUpdate} 
           cellData={{
-            "type": "name",
+            type: 'text',
+            name: 'name',
             value: rowData.name,
             id: rowData.id
           }} />
         <EditableCell 
           tableUpdate={tableUpdate}
           cellData={{
-            type: "price",
-            value: rowData.price,
-            id: rowData.id
-          }} />
-        <EditableCell 
-          tableUpdate={tableUpdate}
-            cellData={{
-            type: "qty",
+            type: 'number',
+            name: 'qty',
             value: rowData.qty,
-            id: rowData.id
-          }} />
-        <EditableCell
-          tableUpdate={tableUpdate}
-          cellData={{
-            type: "category",
-            value: rowData.category,
             id: rowData.id
           }} />
         <td className="del-cell">
