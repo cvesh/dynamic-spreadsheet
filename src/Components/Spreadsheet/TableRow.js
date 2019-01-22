@@ -7,25 +7,22 @@ class TableRow extends React.Component {
   }
 
   render() {
-    const { rowData, tableUpdate } = this.props;
+    const { rowData, columnData, tableUpdate } = this.props;
     return (
       <tr className="eachRow">
-        <EditableCell 
-          tableUpdate={tableUpdate} 
-          cellData={{
-            type: 'text',
-            name: 'name',
-            value: rowData.name,
-            id: rowData.id
-          }} />
-        <EditableCell 
-          tableUpdate={tableUpdate}
-          cellData={{
-            type: 'number',
-            name: 'qty',
-            value: rowData.qty,
-            id: rowData.id
-          }} />
+        <td>{rowData.id}</td>
+          {
+          columnData.map((column, index) =>
+            <EditableCell
+              key={`${column.columnTitle}_${rowData.id}`}
+              tableUpdate={tableUpdate} 
+              cellData={{
+              type: column.columnType,
+              name: column.columnTitle.trim(),
+              value: rowData[column.columnTitle.trim()],
+              id: rowData.id
+            }} />
+          )}
         <td className="del-cell">
           <input 
             type="button"
@@ -35,7 +32,6 @@ class TableRow extends React.Component {
         </td>
       </tr>
     );
-
   }
 }
 

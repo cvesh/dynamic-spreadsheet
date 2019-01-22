@@ -1,21 +1,20 @@
 import React from 'react';
 import SearchBar from 'Components/Form/SearchBar';
 import SpreadsheetTable from 'Components/Spreadsheet/SpreadsheetTable';
+import * as localStore from 'Components/Generics/Localstore';
 
 class Table extends React.Component {
   state = {
     filterText: '',
-    tableData: [
-      {
-        id: '1',
-        qty: 12,
-        name: 'football'
-      }, {
-        id: '2',
-        qty: 15,
-        name: 'baseball'
-      }
-    ]
+    tableData: [],
+    columnData: []
+  }
+
+  componentDidMount() {
+    let columnData = localStore.getColumnData('columnData');
+    this.setState({ columnData: columnData });
+    if(this.state.tableData.length === 0)
+      this.handleAddEvent();
   }
 
   handleUserInput  = filterText => {
@@ -27,19 +26,28 @@ class Table extends React.Component {
     this.state.tableData.splice(index, 1);
     this.setState(this.state.tableData);
   };
+  
+  pluck = (array, key) => {
+    return array.map(o => o[key]);
+  }
 
   handleAddEvent = () => {
-    let id = (+ new Date() + Math.floor(Math.random() * 999999)).toString(36);
-    let emptyData = {
-      id: id,
-      name: "",
-      price: "",
-      category: "",
-      qty: 0
-    }
-    this.state.tableData.push(emptyData);
-    this.setState(this.state.tableData);
-
+    let columnData = localStore.getColumnData('columnData');
+    let tableData = this.state.tableData;
+    console.log(tableData.length)
+    for (let i = 1; i <= 10; i++) {
+      let emptyData = {
+        id: (tableData.length + 1).toString(),
+      }
+      columnData.map((column) => {
+        let columnTitle = column.columnTitle.trim();
+        emptyData[columnTitle] = '';
+      });
+      console.log(emptyData)
+      tableData.push(emptyData);
+    } 
+    this.setState(tableData);
+    // console.log(this.state.tableData)
   }
 
   handleTableUpdate = event => {
@@ -61,7 +69,7 @@ class Table extends React.Component {
   };
 
   render() {
-    const { tableData, filterText } = this.state;
+    const { tableData, columnData, filterText } = this.state;
     return (
       <div>
         <SearchBar 
@@ -72,6 +80,7 @@ class Table extends React.Component {
           rowAdd={e => this.handleAddEvent(e)}
           rowDel={e =>this.handleRowDel(e)}
           tableData={tableData}
+          columnData={columnData}
           filterText={filterText} />
       </div>
     );

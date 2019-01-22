@@ -1,18 +1,9 @@
 import React from 'react';
 import TableRow from 'Components/Spreadsheet/TableRow';
-import * as localStore from 'Components/Generics/Localstore';
-
 class SpreadsheetTable extends React.Component {
-  state = {
-    headerCell: []
-  }
 
-  componentDidMount() {
-    let headerCell = localStore.getColumnData('columnData');
-    this.setState({ headerCell: headerCell }); 
-  }
   render() {
-    const { tableUpdate, rowAdd, rowDel, filterText, tableData } = this.props;
+    const { tableUpdate, rowAdd, rowDel, filterText, tableData, columnData } = this.props;
     var rowData = tableData.map(function(rowData) {
       if (rowData.name.indexOf(filterText) === -1) {
         return false;
@@ -20,11 +11,11 @@ class SpreadsheetTable extends React.Component {
       return (
         <TableRow 
           tableUpdate={tableUpdate}
+          columnData={columnData}
           rowData={rowData}
           onDelEvent={e => rowDel(e)}
           key={rowData.id}/>)
     });
-    const { headerCell } = this.state;
     return (
       <div>
         <button 
@@ -33,10 +24,11 @@ class SpreadsheetTable extends React.Component {
           className="btn">Add</button>
         <table className="table table-bordered">
           <thead>
-            <tr>  
+            <tr>
+              <th>Row Number</th>
               {
-                headerCell.map((cell, index) => 
-                <th key={cell}>
+                columnData.map((cell, index) => 
+                <th key={index}>
                   <input 
                     type='text'
                     name={cell.columnTitle}
