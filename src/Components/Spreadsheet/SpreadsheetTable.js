@@ -1,13 +1,12 @@
 import React from 'react';
 import TableRow from 'Components/Spreadsheet/TableRow';
 class SpreadsheetTable extends React.Component {
-
   render() {
-    const { tableUpdate, rowAdd, rowDel, filterText, tableData, columnData } = this.props;
+    const { tableUpdate, columnUpdate, rowAdd, rowDel, filterText, tableData, columnData } = this.props;
     var rowData = tableData.map(function(rowData) {
-      if (rowData.name.indexOf(filterText) === -1) {
-        return false;
-      }
+      // if (rowData.name.indexOf(filterText) === -1) {
+      //   return false;
+      // }
       return (
         <TableRow 
           tableUpdate={tableUpdate}
@@ -30,10 +29,11 @@ class SpreadsheetTable extends React.Component {
                 columnData.map((cell, index) => 
                 <th key={index}>
                   <input 
+                    id={cell.id}
                     type='text'
-                    name={cell.columnTitle}
+                    name='columnTitle'
                     value={cell.columnTitle} 
-                    onChange={this.tableUpdate} />
+                    onChange={e => columnUpdate(e, columnData)} />
                 </th>)
               }
             </tr>

@@ -3,9 +3,16 @@ import * as localStore from 'Components/Generics/Localstore';
 
 class ColumnForm extends React.Component {
   state = {
+    id: 64,
     columnTitle: '',
     columnType: 'Text',
     columnRequired: false,
+  }
+
+  componentDidMount() {
+    let columnData = localStore.getData('columnData');
+    if(columnData && columnData.length !== 0)
+      this.setState({ id: columnData[columnData.length -1].id});
   }
 
   handleCheckboxChange = () => {
@@ -16,20 +23,26 @@ class ColumnForm extends React.Component {
     const target = e.target;
     const name = target.name;
     const value = target.value;
-    this.setState({
-      [name]: value
-    });
+    let newColumnData = this.state;
+    newColumnData[name] = value; 
+    this.setState(newColumnData);
   }
 
-  handleSubmit = () => {
-    let columnData = localStore.getColumnData('columnData');
-    if(columnData === null)
+  handleColumnSubmit = (e, id) => {  
+    let columnData = localStore.getData('columnData');
+    if(columnData === null){
       columnData = [];
-    columnData.push(this.state);
-    localStore.setColumnData(columnData);
+      id = 64;
+    }
+    let newColumnData = this.state
+    newColumnData.id = id + 1;
+    this.setState({ id: newColumnData.id })
+    columnData.push(newColumnData);
+    localStore.setData('columnData', columnData);
   }
 
   render() {
+    let { id } = this.state;
     return (
       <div className=''>
         <div>
@@ -54,7 +67,7 @@ class ColumnForm extends React.Component {
             name='columnRequired'
             onChange={this.handleCheckboxChange} />
         </div>
-        <button type='submit' onClick={this.handleSubmit}>Add Column</button>
+        <input type='submit' onClick={e => this.handleColumnSubmit(e, id)} value='Add Column'/>
       </div>
     );
   }

@@ -11,9 +11,9 @@ class Table extends React.Component {
   }
 
   componentDidMount() {
-    let columnData = localStore.getColumnData('columnData');
+    let columnData = localStore.getData('columnData');
     this.setState({ columnData: columnData });
-    if(this.state.tableData.length === 0)
+    if(this.state.tableData.length === 0 && columnData)
       this.handleAddEvent();
   }
 
@@ -26,15 +26,10 @@ class Table extends React.Component {
     this.state.tableData.splice(index, 1);
     this.setState(this.state.tableData);
   };
-  
-  pluck = (array, key) => {
-    return array.map(o => o[key]);
-  }
 
   handleAddEvent = () => {
-    let columnData = localStore.getColumnData('columnData');
+    let columnData = localStore.getData('columnData');
     let tableData = this.state.tableData;
-    console.log(tableData.length)
     for (let i = 1; i <= 10; i++) {
       let emptyData = {
         id: (tableData.length + 1).toString(),
@@ -43,7 +38,6 @@ class Table extends React.Component {
         let columnTitle = column.columnTitle.trim();
         emptyData[columnTitle] = '';
       });
-      console.log(emptyData)
       tableData.push(emptyData);
     } 
     this.setState(tableData);
@@ -56,6 +50,7 @@ class Table extends React.Component {
       name: event.target.name,
       value: event.target.value
     };
+    console.log(item)
     let tableData = this.state.tableData.slice();
     let newTableData = tableData.map(function(rowData) {
       for (let key in rowData) {
@@ -68,6 +63,26 @@ class Table extends React.Component {
     this.setState({tableData: newTableData});
   };
 
+  handleColumnUpdate = (event, columnData) => {
+    let item = {
+      id: parseInt(event.target.id),
+      name: event.target.name,
+      value: event.target.value
+    };
+    let newColumnData = columnData.slice().map(function(rowData) {
+      for (let key in rowData) {
+        console.log(item.name)
+        if (key === item.name && rowData.id === item.id) {
+          console.log('test');
+          rowData[key] = item.value;
+        }
+      }
+      return rowData;
+    });
+    this.setState({columnData: newColumnData});
+    localStore.setData('columnData', newColumnData);
+  }
+
   render() {
     const { tableData, columnData, filterText } = this.state;
     return (
@@ -75,13 +90,16 @@ class Table extends React.Component {
         <SearchBar 
           filterText={filterText}
           onUserInput={e => this.handleUserInput(e)} />
-        <SpreadsheetTable 
+        {columnData &&
+          <SpreadsheetTable 
+          columnUpdate={this.handleColumnUpdate}
           tableUpdate={e => this.handleTableUpdate(e)}
           rowAdd={e => this.handleAddEvent(e)}
           rowDel={e =>this.handleRowDel(e)}
           tableData={tableData}
           columnData={columnData}
           filterText={filterText} />
+         }
       </div>
     );
   }

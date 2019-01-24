@@ -10,7 +10,7 @@ class App extends React.Component {
 
   componentDidMount() {
     console.log(this.state.columnData)
-    let columnData = localStore.getColumnData('columnData');
+    let columnData = localStore.getData('columnData');
     if(columnData)
       this.setState({columnData: columnData});
   }
@@ -18,9 +18,11 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        {
+        {/* {
           this.state.columnData ? <Spreadsheet /> : <ColumnForm />
-        }
+        } */}
+        <ColumnForm />
+        <Spreadsheet />
       </div>
     );
   }
