@@ -28,7 +28,9 @@ class ColumnForm extends React.Component {
     this.setState(newColumnData);
   }
 
-  handleColumnSubmit = (e, id) => {  
+  handleColumnSubmit = (e, id) => {
+    e.preventDefault();
+    const { appendColumnData } = this.props;
     let columnData = localStore.getData('columnData');
     if(columnData === null){
       columnData = [];
@@ -39,12 +41,18 @@ class ColumnForm extends React.Component {
     this.setState({ id: newColumnData.id })
     columnData.push(newColumnData);
     localStore.setData('columnData', columnData);
+    console.log(columnData)
+    appendColumnData(newColumnData.columnTitle);
   }
+
+  
 
   render() {
     let { id } = this.state;
+    console.log(this.props)
     return (
       <div className=''>
+        <form onSubmit={e => this.handleColumnSubmit(e, id)}>
         <div>
           <label>Column Title</label>
           <input
@@ -67,7 +75,8 @@ class ColumnForm extends React.Component {
             name='columnRequired'
             onChange={this.handleCheckboxChange} />
         </div>
-        <input type='submit' onClick={e => this.handleColumnSubmit(e, id)} value='Add Column'/>
+        <input type='submit' value='Add Column'/>
+        </form>
       </div>
     );
   }

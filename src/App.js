@@ -21,7 +21,6 @@ class App extends React.Component {
         {/* {
           this.state.columnData ? <Spreadsheet /> : <ColumnForm />
         } */}
-        <ColumnForm />
         <Spreadsheet />
       </div>
     );

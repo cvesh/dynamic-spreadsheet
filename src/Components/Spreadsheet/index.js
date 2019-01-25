@@ -1,5 +1,6 @@
 import React from 'react';
 import SearchBar from 'Components/Form/SearchBar';
+import ColumnForm from 'Components/Form/ColumnForm';
 import SpreadsheetTable from 'Components/Spreadsheet/SpreadsheetTable';
 import * as localStore from 'Components/Generics/Localstore';
 
@@ -12,9 +13,15 @@ class Table extends React.Component {
 
   componentDidMount() {
     let columnData = localStore.getData('columnData');
-    this.setState({ columnData: columnData });
-    if(this.state.tableData.length === 0 && columnData)
+    let tableData = localStore.getData('tableData');
+    tableData = tableData ? tableData : []
+    this.setState({ 
+      columnData: columnData
+    });
+    if(tableData.length === 0 && columnData)
       this.handleAddEvent();
+    else
+      this.setState({ tableData: tableData });
   }
 
   handleUserInput  = filterText => {
@@ -37,11 +44,13 @@ class Table extends React.Component {
       columnData.map((column) => {
         let columnTitle = column.columnTitle.trim();
         emptyData[columnTitle] = '';
+        return emptyData;
       });
       tableData.push(emptyData);
     } 
     this.setState(tableData);
-    // console.log(this.state.tableData)
+    localStore.setData('tableData', tableData);
+    
   }
 
   handleTableUpdate = event => {
@@ -50,7 +59,6 @@ class Table extends React.Component {
       name: event.target.name,
       value: event.target.value
     };
-    console.log(item)
     let tableData = this.state.tableData.slice();
     let newTableData = tableData.map(function(rowData) {
       for (let key in rowData) {
@@ -61,6 +69,7 @@ class Table extends React.Component {
       return rowData;
     });
     this.setState({tableData: newTableData});
+    localStore.setData('tableData', newTableData);
   };
 
   handleColumnUpdate = (event, columnData) => {
@@ -83,13 +92,33 @@ class Table extends React.Component {
     localStore.setData('columnData', newColumnData);
   }
 
+  appendColumnData = (newKey) => {
+    let columnData = localStore.getData('columnData');
+    this.setState({ columnData: columnData })
+    let tableData = localStore.getData('tableData');
+    if(tableData) {
+      let newTableData = tableData.map(function(rowData) {
+        if(!(newKey in rowData))
+          rowData[newKey] = '';
+        return rowData;
+      });
+      this.setState({ tableData: newTableData });
+      localStore.setData('tableData', newTableData);
+    }
+    else
+      this.handleAddEvent();
+  }
+
   render() {
     const { tableData, columnData, filterText } = this.state;
     return (
       <div>
-        <SearchBar 
+        <ColumnForm
+          appendColumnData={e => this.appendColumnData(e)}
+        />
+        {/* <SearchBar 
           filterText={filterText}
-          onUserInput={e => this.handleUserInput(e)} />
+          onUserInput={e => this.handleUserInput(e)} /> */}
         {columnData &&
           <SpreadsheetTable 
           columnUpdate={this.handleColumnUpdate}
