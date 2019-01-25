@@ -28,12 +28,6 @@ class Table extends React.Component {
     this.setState({filterText: filterText});
   };
 
-  handleRowDel = rowData => {
-    let index = this.state.tableData.indexOf(rowData);
-    this.state.tableData.splice(index, 1);
-    this.setState(this.state.tableData);
-  };
-
   handleAddEvent = () => {
     let columnData = localStore.getData('columnData');
     let tableData = this.state.tableData;
@@ -80,11 +74,8 @@ class Table extends React.Component {
     };
     let newColumnData = columnData.slice().map(function(rowData) {
       for (let key in rowData) {
-        console.log(item.name)
-        if (key === item.name && rowData.id === item.id) {
-          console.log('test');
+        if (key === item.name && rowData.id === item.id)
           rowData[key] = item.value;
-        }
       }
       return rowData;
     });
@@ -124,7 +115,6 @@ class Table extends React.Component {
           columnUpdate={this.handleColumnUpdate}
           tableUpdate={e => this.handleTableUpdate(e)}
           rowAdd={e => this.handleAddEvent(e)}
-          rowDel={e =>this.handleRowDel(e)}
           tableData={tableData}
           columnData={columnData}
           filterText={filterText} />

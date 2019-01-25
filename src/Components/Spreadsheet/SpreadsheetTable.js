@@ -2,7 +2,7 @@ import React from 'react';
 import TableRow from 'Components/Spreadsheet/TableRow';
 class SpreadsheetTable extends React.Component {
   render() {
-    const { tableUpdate, columnUpdate, rowAdd, rowDel, filterText, tableData, columnData } = this.props;
+    const { tableUpdate, columnUpdate, rowAdd, filterText, tableData, columnData } = this.props;
     var rowData = tableData.map(function(rowData) {
       // if (rowData.name.indexOf(filterText) === -1) {
       //   return false;
@@ -12,7 +12,6 @@ class SpreadsheetTable extends React.Component {
           tableUpdate={tableUpdate}
           columnData={columnData}
           rowData={rowData}
-          onDelEvent={e => rowDel(e)}
           key={rowData.id}/>)
     });
     return (

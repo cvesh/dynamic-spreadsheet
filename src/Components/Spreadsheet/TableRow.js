@@ -23,13 +23,6 @@ class TableRow extends React.Component {
               id: rowData.id
             }} />
           )}
-        <td className="del-cell">
-          <input 
-            type="button"
-            onClick={e => this.onDelEvent(rowData)} 
-            value="X" 
-            className="del-btn" />
-        </td>
       </tr>
     );
   }

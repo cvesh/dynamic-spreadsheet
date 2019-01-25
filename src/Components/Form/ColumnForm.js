@@ -41,15 +41,11 @@ class ColumnForm extends React.Component {
     this.setState({ id: newColumnData.id })
     columnData.push(newColumnData);
     localStore.setData('columnData', columnData);
-    console.log(columnData)
     appendColumnData(newColumnData.columnTitle);
   }
-
   
-
   render() {
     let { id } = this.state;
-    console.log(this.props)
     return (
       <div className=''>
         <form onSubmit={e => this.handleColumnSubmit(e, id)}>
