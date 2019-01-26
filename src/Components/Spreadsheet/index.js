@@ -1,15 +1,14 @@
 import React from 'react';
-import SearchBar from 'Components/Form/SearchBar';
 import ColumnForm from 'Components/Form/ColumnForm';
 import SpreadsheetTable from 'Components/Spreadsheet/SpreadsheetTable';
 import * as localStore from 'Components/Generics/Localstore';
 
 class Table extends React.Component {
   state = {
-    filterText: '',
     tableData: [],
     columnData: [],
     currentColumn: '',
+    error: false
   }
 
   componentDidMount() {
@@ -24,10 +23,6 @@ class Table extends React.Component {
     else
       this.setState({ tableData: tableData });
   }
-
-  handleUserInput  = filterText => {
-    this.setState({filterText: filterText});
-  };
 
   handleAddEvent = () => {
     let columnData = localStore.getData('columnData');
@@ -115,19 +110,35 @@ class Table extends React.Component {
   }
 
   setCurrentColumn = (e) => {
-    this.setState({ currentColumn: e.target.value })
+    this.setState({ currentColumn: e.target.value });
+  }
+
+  validateCell = (e, type) => {
+    let value = e.target.value.trim();
+    let  dateRegex = /(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d/;
+    if(e.target.required && value.length === 0){
+      e.target.classList.add('error');
+      return;
+    }
+    else
+      e.target.classList.remove('error');
+    if (type === 'number' && isNaN(value))
+      e.target.classList.add('error')
+    else
+      e.target.classList.remove('error');
+    if(type === 'date' && !value.match(dateRegex))
+      e.target.classList.add('error')
+    else
+      e.target.classList.remove('error');
   }
 
   render() {
-    const { tableData, columnData, filterText } = this.state;
+    const { tableData, columnData, error } = this.state;
     return (
       <div>
         <ColumnForm
           appendColumnData={e => this.appendColumnData(e)}
         />
-        {/* <SearchBar 
-          filterText={filterText}
-          onUserInput={e => this.handleUserInput(e)} /> */}
         {columnData &&
           <SpreadsheetTable 
           columnUpdate={this.handleColumnUpdate}
@@ -136,7 +147,8 @@ class Table extends React.Component {
           tableData={tableData}
           columnData={columnData}
           setCurrentColumn={this.setCurrentColumn}
-          filterText={filterText} />
+          validateCell={this.validateCell}
+          error={error} />
          }
       </div>
     );

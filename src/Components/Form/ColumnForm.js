@@ -5,7 +5,7 @@ class ColumnForm extends React.Component {
   state = {
     id: 64,
     columnTitle: '',
-    columnType: 'Text',
+    columnType: 'text',
     columnRequired: false,
   }
 
@@ -43,7 +43,7 @@ class ColumnForm extends React.Component {
     localStore.setData('columnData', columnData);
     appendColumnData(newColumnData.columnTitle);
   }
-  
+
   render() {
     let { id } = this.state;
     return (
@@ -59,9 +59,9 @@ class ColumnForm extends React.Component {
         <div>
           <label>Column Type</label>
           <select name='columnType' onChange={this.handleChange}>
-            <option value='Text'>Text</option>
-            <option value='Number'>Number</option>
-            <option value='Date'>Date</option>
+            <option value='text'>Text</option>
+            <option value='number'>Number</option>
+            <option value='date'>Date</option>
           </select>
         </div>
         <div>
