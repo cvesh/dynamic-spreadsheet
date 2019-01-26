@@ -2,7 +2,8 @@ import React from 'react';
 import TableRow from 'Components/Spreadsheet/TableRow';
 class SpreadsheetTable extends React.Component {
   render() {
-    const { tableUpdate, columnUpdate, rowAdd, filterText, tableData, columnData } = this.props;
+    const { tableUpdate, columnUpdate, rowAdd, 
+      filterText, tableData, columnData, setCurrentColumn } = this.props;
     var rowData = tableData.map(function(rowData) {
       // if (rowData.name.indexOf(filterText) === -1) {
       //   return false;
@@ -31,7 +32,8 @@ class SpreadsheetTable extends React.Component {
                     id={cell.id}
                     type='text'
                     name='columnTitle'
-                    value={cell.columnTitle} 
+                    value={cell.columnTitle}
+                    onFocus={e => setCurrentColumn(e)}
                     onChange={e => columnUpdate(e, columnData)} />
                 </th>)
               }

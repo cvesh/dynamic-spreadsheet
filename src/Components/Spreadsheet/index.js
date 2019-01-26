@@ -8,7 +8,8 @@ class Table extends React.Component {
   state = {
     filterText: '',
     tableData: [],
-    columnData: []
+    columnData: [],
+    currentColumn: '',
   }
 
   componentDidMount() {
@@ -53,7 +54,7 @@ class Table extends React.Component {
       name: event.target.name,
       value: event.target.value
     };
-    let tableData = this.state.tableData.slice();
+    let tableData = this.state.tableData;
     let newTableData = tableData.map(function(rowData) {
       for (let key in rowData) {
         if (key === item.name && rowData.id === item.id) {
@@ -67,19 +68,32 @@ class Table extends React.Component {
   };
 
   handleColumnUpdate = (event, columnData) => {
+    let currentColumn = this.state.currentColumn;
+    let tableData = this.state.tableData;
     let item = {
       id: parseInt(event.target.id),
       name: event.target.name,
       value: event.target.value
     };
-    let newColumnData = columnData.slice().map(function(rowData) {
+    let newTableData = tableData.map(function(rowData) {
+      if (currentColumn !== item.value) {
+        rowData[item.value] = rowData[currentColumn];
+        delete rowData[currentColumn];
+      }
+      return rowData;
+    });
+    let newColumnData = columnData.map(function(rowData) {
       for (let key in rowData) {
         if (key === item.name && rowData.id === item.id)
           rowData[key] = item.value;
       }
       return rowData;
     });
-    this.setState({columnData: newColumnData});
+    this.setState({
+      tableData: newTableData,
+      columnData: newColumnData,
+      currentColumn: item.value});
+    localStore.setData('tableData', newTableData);
     localStore.setData('columnData', newColumnData);
   }
 
@@ -100,6 +114,10 @@ class Table extends React.Component {
       this.handleAddEvent();
   }
 
+  setCurrentColumn = (e) => {
+    this.setState({ currentColumn: e.target.value })
+  }
+
   render() {
     const { tableData, columnData, filterText } = this.state;
     return (
@@ -117,6 +135,7 @@ class Table extends React.Component {
           rowAdd={e => this.handleAddEvent(e)}
           tableData={tableData}
           columnData={columnData}
+          setCurrentColumn={this.setCurrentColumn}
           filterText={filterText} />
          }
       </div>
