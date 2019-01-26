@@ -1,3 +1,5 @@
+// SpreadSheet main page
+
 import React from 'react';
 import TableRow from 'Components/Spreadsheet/TableRow';
 class SpreadsheetTable extends React.Component {

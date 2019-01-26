@@ -1,3 +1,5 @@
+// Single table row
+
 import React from 'react';
 import EditableCell from 'Components/Spreadsheet/EditableCell';
 

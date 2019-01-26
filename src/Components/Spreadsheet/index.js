@@ -24,6 +24,7 @@ class Table extends React.Component {
       this.setState({ tableData: tableData });
   }
 
+  // This will add / append 10 rows 
   handleAddEvent = () => {
     let columnData = localStore.getData('columnData');
     let tableData = this.state.tableData;
@@ -43,6 +44,7 @@ class Table extends React.Component {
     
   }
 
+  // This will update table cell onChange
   handleTableUpdate = event => {
     let item = {
       id: event.target.id,
@@ -62,6 +64,7 @@ class Table extends React.Component {
     localStore.setData('tableData', newTableData);
   };
 
+  // This updates first row with column title onChange
   handleColumnUpdate = (event, columnData) => {
     let currentColumn = this.state.currentColumn;
     let tableData = this.state.tableData;

@@ -1,3 +1,6 @@
+
+// Single table cell
+
 import React from 'react';
 
 const EditableCell = props => (

@@ -1,3 +1,5 @@
+// Column add form
+
 import React from 'react';
 import * as localStore from 'Components/Generics/Localstore';
 
@@ -57,6 +59,7 @@ class ColumnForm extends React.Component {
             onChange={this.handleChange} />
         </div>
         <div>
+          {/* TODO: add fourth type with select dropdown*/}
           <label>Column Type</label>
           <select name='columnType' onChange={this.handleChange}>
             <option value='text'>Text</option>
